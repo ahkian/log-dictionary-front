@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
+// TODO add view to router
 // Define reactive state variables with types
 const responseData = ref<string | null>(null)
 const error = ref<string | null>(null)
