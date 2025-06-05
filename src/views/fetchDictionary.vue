@@ -30,7 +30,7 @@ const fetchData = async (): Promise<void> => {
   error.value = null
 
   try {
-    const res = await fetch('https://jsonplaceholder.typicode.com/posts/1')
+    const res = await fetch('http://localhost:3000/api/getAll')
     if (!res.ok) throw new Error(`HTTP error ${res.status}`)
     const data = await res.json()
     responseData.value = JSON.stringify(data, null, 2)
