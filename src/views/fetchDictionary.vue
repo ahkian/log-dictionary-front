@@ -1,7 +1,15 @@
 <template>
   <div>
     <h2>Log Dictionary</h2>
-    <input type="text" v-model="filterText" placeholder="Filter logs" class="filter-input" />
+    <div class="filters">
+      <input type="text" v-model="filterText" placeholder="Filter logs" class="filter-input" />
+      <select v-model="selectedSystemArea" class="system-area-dropdown">
+        <option value="">All system areas</option>
+        <option v-for="area in systemAreas" :key="area" :value="area">
+          {{ area }}
+        </option>
+      </select>
+    </div>
     <table v-if="entries.length">
       <thead>
         <tr>
@@ -50,6 +58,7 @@ export default defineComponent({
   setup() {
     const entries = ref<Entry[]>([])
     const filterText = ref('')
+    const selectedSystemArea = ref('')
 
     onMounted(() => {
       axios
@@ -62,23 +71,33 @@ export default defineComponent({
         })
     })
 
-    const filteredEntries = computed(() => {
-      if (!filterText.value.trim()) {
-        return entries.value
-      }
+    const systemAreas = computed(() => {
+      const unique = new Set(entries.value.map((e) => e.systemArea))
+      return Array.from(unique).sort()
+    })
 
+    const filteredEntries = computed(() => {
       const term = filterText.value.toLowerCase()
-      return entries.value.filter((entry) =>
-        Object.values(entry).some(
-          (val) => typeof val === 'string' && val.toLowerCase().includes(term),
-        ),
-      )
+
+      return entries.value.filter((entry) => {
+        const matchesText =
+          !term ||
+          Object.values(entry).some(
+            (val) => typeof val === 'string' && val.toLowerCase().includes(term),
+          )
+        const matchesSystemArea =
+          !selectedSystemArea.value || entry.systemArea === selectedSystemArea.value
+
+        return matchesText && matchesSystemArea
+      })
     })
 
     return {
       entries,
       filterText,
       filteredEntries,
+      systemAreas,
+      selectedSystemArea,
     }
   },
 })
@@ -113,7 +132,8 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: #f1f1f1;
+  background-color: green;
+  color: yellow;
 }
 
 h2 {
