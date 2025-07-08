@@ -132,7 +132,7 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: green;
+  background-color: blue;
   color: yellow;
 }
 
@@ -143,5 +143,9 @@ h2 {
 
 .explanation {
   width: 50%;
+}
+
+select {
+  margin-left: 1em;
 }
 </style>
