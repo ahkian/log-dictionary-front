@@ -148,4 +148,9 @@ h2 {
 select {
   margin-left: 1em;
 }
+
+.filters {
+  display: flex;
+  align-items: stretch;
+}
 </style>
